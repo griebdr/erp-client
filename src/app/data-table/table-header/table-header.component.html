@@ -1,0 +1,9 @@
+<div class="table-header">
+  <button class="action-item" mat-button color="primary" (click)="insert.emit()"> <span class="mat-h3 mat-body-strong">
+      ADD </span> </button>
+  <button class="action-item" mat-button color="primary" (click)="delete.emit()"> <span class="mat-h3 mat-body-strong">
+      REMOVE </span> </button>
+  <mat-form-field class="filter" [floatLabel]="'never'">
+    <input placeholder="filter" matInput (keyup)="filter.emit($event.target.value)">
+  </mat-form-field>
+</div>

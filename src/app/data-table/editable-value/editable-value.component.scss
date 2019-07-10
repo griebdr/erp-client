@@ -1,0 +1,28 @@
+@import '~@angular/material/theming';
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 72px;
+  width: 300px;
+  background-color: #f9f9f9;
+  @include mat-elevation(2);
+}
+
+.edit-input {
+  width: 85%;
+  font-size: initial;
+  color: initial;
+}
+
+.open-table {
+  position: relative;
+  z-index: 1;
+  background-color:white;
+}
+
+.table-container {
+  @include mat-elevation(2);
+}
