@@ -1,4 +1,5 @@
 import { Directive, ElementRef, OnInit } from '@angular/core';
+import { MatInput, MatAutocompleteTrigger } from '@angular/material';
 
 @Directive({
   selector: '[appFocus]'

@@ -1,0 +1,11 @@
+<div *ngIf="open; else closed" class="open-table">
+  <app-data-table #table (close)="cancel.emit(); open=false" (save)="save.emit($event); 
+  open=false" [style.width]="'540px'" [data]="value" [tableInfo]="typeInfo"
+    (insert)="modified.emit({ type: 'insert', value: $event })"
+    (delete)="modified.emit({ type: 'delete', value: $event })"
+    (update)="modified.emit({ type: 'update', value: $event })">
+  </app-data-table>
+</div>
+<ng-template #closed>
+  <span class="text"> {{value?.length}} </span>
+</ng-template>

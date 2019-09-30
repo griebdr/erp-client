@@ -1,47 +1,15 @@
-<ng-container [ngSwitch]="type.name">
-  <ng-container *ngSwitchCase="'String'">
-    <div *ngIf="open" [class.mat-elevation-z2]="true" class="input-container" (click)="onOpenClick($event)">
-      <mat-form-field class="edit-input" (keyup.enter)="open = false">
-        <input appFocus matInput type="text"  [formControl]="valueControl">
-      </mat-form-field>
-    </div>
-    <div *ngIf="!open">{{valueControl.value}}</div>
-  </ng-container>
-
-  <ng-container *ngSwitchCase="'Number'">
-    <div *ngIf="open" [class.mat-elevation-z2]="true" class="input-container" (click)="onOpenClick($event)">
-      <mat-form-field class="edit-input" (keyup.enter)="open = false">
-        <input appFocus matInput type="number" [formControl]="valueControl">
-      </mat-form-field>
-    </div>
-    <div *ngIf="!open">{{valueControl.value}}</div>
-  </ng-container>
-
-  <ng-container *ngSwitchCase="'Table'">
-    <div *ngIf="open" class="open-table" (click)="onTableClick($event, table)">
-      <app-data-table #table [style.width]="'600px'" [data]="valueControl.value" [tableInfo]="type.info"
-        (tableChange)="valueChanged.emit($event)"></app-data-table>
-    </div>
-
-    <span *ngIf="!open" class="text"> {{valueControl.value.length}} </span>
-  </ng-container>
-
-  <ng-container *ngSwitchCase="'AutocompleteMap'">
-    <div *ngIf="open" [class.mat-elevation-z2]="true" class="input-container" (click)="onOpenClick($event)">
-      <mat-form-field class="edit-input" *ngIf="open" (keyup.enter)="open = false">
-        <input appFocus matInput type="text" [formControl]="valueControl"
-          [matAutocomplete]="auto">
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option (click)="$event.stopPropagation()" *ngFor="let option of filteredOptions | async" [value]="option">
-            {{option}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-    </div>
-    <span *ngIf="!open" class="text"> {{valueControl.value}} </span>
-  </ng-container>
-
-
-
-  <ng-template *ngSwitchDefault>Unknown type</ng-template>
+<ng-container [ngSwitch]="typeName">
+  <app-editable-text #editableValue *ngSwitchCase="'Text'" [value]="value" (save)="onSave($event)"
+    (cancel)="onCancel()"></app-editable-text>
+  <app-editable-number #editableValue *ngSwitchCase="'Number'" [value]="value" (save)="onSave($event)"
+    cancel="onCancel()">
+  </app-editable-number>
+  <app-editable-date #editableValue *ngSwitchCase="'Date'" [value]="value" (save)="onSave($event)"
+    (cancel)="onCancel()">
+  </app-editable-date>
+  <app-editable-autocomplete-map #editableValue *ngSwitchCase="'AutocompleteMap'" [value]="value" [typeInfo]="typeInfo"
+    (save)="onSave($event)" (cancel)="onCancel()"></app-editable-autocomplete-map>
+  <app-editable-table #editableValue *ngSwitchCase="'Table'" [value]="value" [typeInfo]="typeInfo" (cancel)="onCancel()"
+    [ngClass]="{'edit-active': editableValue.open}" (modified)="onModification($event)">
+  </app-editable-table>
 </ng-container>

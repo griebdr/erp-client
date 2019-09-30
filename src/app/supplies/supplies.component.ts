@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TableInfo, EditableType } from '../data-table/editable-value/editable-type';
-import { TableChange } from '../data-table/data-table/data-table.component';
 import * as Lodash from 'lodash';
 import { CrudService } from '../services/crud.service';
 import { map, startWith } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { DataTableComponent } from 'gdr-data-table';
 
 
 @Component({
@@ -13,9 +13,13 @@ import { Observable } from 'rxjs';
   styleUrls: ['./supplies.component.scss']
 })
 export class SuppliesComponent implements OnInit {
+  @ViewChild('table', { static: true }) table: DataTableComponent;
+
   tableInfo = new TableInfo();
-  supplies: Observable<object[]>;
+  supplies: Promise<object[]>;
   tableNames = new Map<string, string>([['main', 'supply']]);
+
+  didSave = new Subject<boolean>();
 
   constructor(private crudService: CrudService) {
     this.tableInfo.displayedColumns = ['name', 'quantity'];
@@ -24,25 +28,39 @@ export class SuppliesComponent implements OnInit {
       ['quantity', 'Quantity'],
     ]);
     this.tableInfo.columnTypes = new Map<string, EditableType>([
-      ['name', { name: 'String' }],
+      ['name', { name: 'Text' }],
       ['quantity', { name: 'Number' }],
     ]);
 
     this.supplies = this.crudService.find('supply')
       .pipe(
         map(supplies => Lodash.sortBy(supplies, ['name']))
-      );
-
+      ).toPromise();
   }
 
   ngOnInit() {
 
   }
 
-  onTableChange(tableNames: Map<string, string>, tableChange: TableChange) {
-    this.crudService.makeChanges(tableNames, tableChange);
+  async onUpdate(update: any) {
+    const result = await this.crudService.update('supply', { name: update.row['name'] }, { [update.column]: update.value });
+    if (result === true) {
+      this.didSave.next(true);
+    }
   }
 
+  async onDelete(deletion: any) {
+    const result = await this.crudService.delete('supply', deletion);
+    if (result === true) {
+      this.didSave.next(true);
+    }
+  }
 
+  async onInsert(insertion: any) {
+    const result = await this.crudService.insert('supply', insertion);
+    if (result === true) {
+      this.didSave.next(true);
+    }
+  }
 
 }

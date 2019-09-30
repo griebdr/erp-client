@@ -1,6 +1,11 @@
-export class EditableType {
-  name: 'String' | 'Number' | 'Date' | 'AutocompleteMap' | 'Table';
-  info?: AutocompleteMapInfo | TableInfo; 
+import { TableFeatures } from '../data-table/data-table.component';
+
+export type EditableTypeName = 'Text' | 'Number' | 'Date' | 'AutocompleteMap' | 'Table';
+export type EditableTypeInfo = AutocompleteMapInfo | TableInfo;
+
+export type EditableType = {
+  name: EditableTypeName,
+  info?: EditableTypeInfo,
 }
 
 export class AutocompleteMapInfo {
@@ -12,5 +17,11 @@ export class TableInfo {
   displayedColumns: string[];
   columnNames: Map<string, string>;
   columnTypes: Map<string, EditableType>;
+  features?: TableFeatures;
+}
+
+export class TableModification {
+  type: 'insert' | 'delete' | 'update';
+  value: any;
 }
 

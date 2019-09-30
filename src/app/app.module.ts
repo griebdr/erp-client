@@ -4,14 +4,15 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import {  DataTableModule } from './data-table/data-table.module'
+import { DataTableModule } from './data-table/data-table.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {MatButtonModule, MatCheckboxModule} from '@angular/material';
+import { MatButtonModule, MatCheckboxModule } from '@angular/material';
 import { SuppliesComponent } from './supplies/supplies.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductsComponent } from './products/products.component';
+import { TableInsertComponent } from './data-table/table-insert/table-insert.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { ProductsComponent } from './products/products.component';
     HttpClientModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [TableInsertComponent],
 })
 export class AppModule { }

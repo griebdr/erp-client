@@ -1,0 +1,15 @@
+<div *ngIf="open" [class.mat-elevation-z2]="true" class="input-container">
+  <mat-form-field class="edit-input" *ngIf="open">
+    <input #input appCloseAutocomplete matInput type="text" [formControl]="valueControl" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option (click)="$event.stopPropagation()" *ngFor="let option of filteredOptions | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <div class="action-buttons">
+    <button mat-button color="primary" (click)="$event.stopPropagation(); cancel.emit(); open = false">CANCEL</button>
+    <button mat-button color="primary" (click)="$event.stopPropagation(); onSave(); open = false">SAVE</button>
+  </div>
+</div>
+<span *ngIf="!open" class="text"> {{valueControl.value}} </span>

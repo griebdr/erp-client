@@ -1,9 +1,22 @@
 <div class="table-header">
-  <button class="action-item" mat-button color="primary" (click)="insert.emit()"> <span class="mat-h3 mat-body-strong">
-      ADD </span> </button>
-  <button class="action-item" mat-button color="primary" (click)="delete.emit()"> <span class="mat-h3 mat-body-strong">
-      REMOVE </span> </button>
-  <mat-form-field class="filter" [floatLabel]="'never'">
-    <input placeholder="filter" matInput (keyup)="filter.emit($event.target.value)">
-  </mat-form-field>
+  <div>
+    <button *ngIf="features.insert" class="action-item" mat-button color="primary" (click)="insert.emit()"> <span
+        class="mat-h3 mat-body-strong">
+        INSERT </span> </button>
+    <button *ngIf="features.delete" class="action-item" mat-button color="primary" (click)="delete.emit()"> <span
+        class="mat-h3 mat-body-strong">
+        DELETE </span> </button>
+    <mat-form-field *ngIf="features.filter" class="filter" [floatLabel]="'never'">
+      <input placeholder="filter" matInput (keyup)="filter.emit($event.target.value)">
+    </mat-form-field>
+  </div>
+  <div *ngIf="features.close">
+    <button color="primary" mat-icon-button (click)="$event.stopPropagation(); save.emit()">
+      <mat-icon class="save-icon">save</mat-icon>
+    </button>
+    <button color="primary" mat-icon-button (click)="$event.stopPropagation(); close.emit()">
+      <mat-icon class="close-icon">close</mat-icon>
+    </button>
+  </div>
+
 </div>

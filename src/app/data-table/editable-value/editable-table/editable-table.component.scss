@@ -1,0 +1,11 @@
+@import '~@angular/material/theming';
+
+.open-table {
+  position: relative;
+  z-index: 1;
+  background-color:white;
+}
+
+.table-container {
+  @include mat-elevation(2);
+}
