@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { TableInfo, EditableType } from 'gdr-data-table';
+// import { TableInfo, EditableType } from 'gdr-data-table';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +8,6 @@ import { TableInfo, EditableType } from 'gdr-data-table';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
- 
 
   constructor() {
 

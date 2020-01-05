@@ -1,20 +1,20 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import * as Lodash from 'lodash';
 import { CrudService } from '../services/crud.service';
 import { map } from 'rxjs/operators';
 import { TableOptions } from 'gdr-data-table';
 
 @Component({
-  selector: 'app-supplies',
-  templateUrl: './supplies.component.html',
-  styleUrls: ['./supplies.component.scss']
+  selector: 'app-skills',
+  templateUrl: './skills.component.html',
+  styleUrls: ['./skills.component.scss']
 })
-export class SuppliesComponent implements OnInit {
-  supplies: Promise<object[]>;
+export class SkillsComponent implements OnInit {
+  skills: Promise<object[]>;
   options = new TableOptions();
 
   constructor(private crudService: CrudService) {
-    this.supplies = this.crudService.find('supply')
+    this.skills = this.crudService.find('skill')
       .pipe(
         map(supplies => Lodash.sortBy(supplies, ['name']))
       ).toPromise();
@@ -23,12 +23,11 @@ export class SuppliesComponent implements OnInit {
   ngOnInit() {
     this.options.columnTypes = [
       { name: 'name', type: 'Text' },
-      { name: 'quantity', type: 'Number' }
     ];
   }
 
   onModification(modification: any) {
-    this.crudService.modify('supply', modification).then(result => console.log(result));
+    this.crudService.modify('skill', modification).then(result => console.log(result));
   }
 
 }

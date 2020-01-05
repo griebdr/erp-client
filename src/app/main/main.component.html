@@ -1,0 +1,25 @@
+<mat-toolbar></mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened>
+    <!-- <button [style.width]="'100%'" mat-button [matMenuTriggerFor]="menu"><span class="mat-h3">Static</span></button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="/main/supplies">Supplies</button>
+      <button mat-menu-item routerLink="/main/products">Products</button>
+    </mat-menu> -->
+    <button [style.width]="'100%'" mat-button routerLink="/main/supplies"><span class="mat-h3">Supplies</span></button>
+    <button [style.width]="'100%'" mat-button routerLink="/main/products"><span class="mat-h3">Products</span></button>
+    <button [style.width]="'100%'" mat-button routerLink="/main/employees"><span class="mat-h3">Employees</span></button>
+    <button [style.width]="'100%'" mat-button routerLink="/main/tools"><span class="mat-h3">Tools</span></button>
+    <button [style.width]="'100%'" mat-button routerLink="/main/shifts"><span class="mat-h3">Shifts</span></button>
+    <button [style.width]="'100%'" mat-button routerLink="/main/skills"><span class="mat-h3">Skills</span></button>
+    <br> <br>
+    <button [style.width]="'100%'" mat-button routerLink="/main/supplyOrder"><span class="mat-h3">Supply
+        Order</span></button>
+    <button [style.width]="'100%'" mat-button routerLink="/main/productOrder"><span class="mat-h3">Product
+        Order</span>
+    </button>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

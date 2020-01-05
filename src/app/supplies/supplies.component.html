@@ -1,2 +1,1 @@
-<app-data-table #table [data]="supplies" [tableInfo]="tableInfo" (update)="onUpdate($event)" (delete)="onDelete($event)"
-  (insert)="onInsert($event)"></app-data-table>￼
+<gdr-data-table #table [data]="supplies" [options]="options" (modified)="onModification($event)"></gdr-data-table>

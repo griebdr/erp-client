@@ -5,16 +5,16 @@ import { map } from 'rxjs/operators';
 import { TableOptions } from 'gdr-data-table';
 
 @Component({
-  selector: 'app-supplies',
-  templateUrl: './supplies.component.html',
-  styleUrls: ['./supplies.component.scss']
+  selector: 'app-shifts',
+  templateUrl: './shifts.component.html',
+  styleUrls: ['./shifts.component.scss']
 })
-export class SuppliesComponent implements OnInit {
-  supplies: Promise<object[]>;
+export class ShiftsComponent implements OnInit {
+  shifts: Promise<object[]>;
   options = new TableOptions();
 
   constructor(private crudService: CrudService) {
-    this.supplies = this.crudService.find('supply')
+    this.shifts = this.crudService.find('shift')
       .pipe(
         map(supplies => Lodash.sortBy(supplies, ['name']))
       ).toPromise();
@@ -23,12 +23,15 @@ export class SuppliesComponent implements OnInit {
   ngOnInit() {
     this.options.columnTypes = [
       { name: 'name', type: 'Text' },
-      { name: 'quantity', type: 'Number' }
+      { name: 'start', type: 'Text' },
+      { name: 'end', type: 'Text' },
+      { name: 'breakStart', type: 'Text' },
+      { name: 'breakEnd', type: 'Text' },
     ];
   }
 
   onModification(modification: any) {
-    this.crudService.modify('supply', modification).then(result => console.log(result));
+    this.crudService.modify('shift', modification).then(result => console.log(result));
   }
 
 }
