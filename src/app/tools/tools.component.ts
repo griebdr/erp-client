@@ -31,5 +31,4 @@ export class ToolsComponent implements OnInit {
   onModification(modification: any) {
     this.crudService.modify('tool', modification).then(result => console.log(result));
   }
-
 }

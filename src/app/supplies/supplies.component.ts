@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import * as Lodash from 'lodash';
 import { CrudService } from '../services/crud.service';
 import { map } from 'rxjs/operators';
-import { TableOptions } from 'gdr-data-table';
+import { TableOptions } from '../data-table/editable-value/editable-type';
+
 
 @Component({
   selector: 'app-supplies',
@@ -11,7 +12,9 @@ import { TableOptions } from 'gdr-data-table';
 })
 export class SuppliesComponent implements OnInit {
   supplies: Promise<object[]>;
-  options = new TableOptions();
+  options: Promise<TableOptions>;
+
+  @ViewChild('table', { static: false }) table: any;
 
   constructor(private crudService: CrudService) {
     this.supplies = this.crudService.find('supply')
@@ -20,15 +23,25 @@ export class SuppliesComponent implements OnInit {
       ).toPromise();
   }
 
-  ngOnInit() {
-    this.options.columnTypes = [
-      { name: 'name', type: 'Text' },
-      { name: 'quantity', type: 'Number' }
-    ];
+  async ngOnInit() {
+    // this.options.columnTypes = [
+    //   { name: 'name', type: 'Text' },
+    //   { name: 'quantity', type: 'Number' }
+    // ];
+
+    this.options = new Promise(async resolve => resolve({ columnTypes: await this.crudService.getTypes('supply').toPromise() }));
+
   }
 
-  onModification(modification: any) {
-    this.crudService.modify('supply', modification).then(result => console.log(result));
+  async onModification(modification: any) {
+    if (!await this.crudService.modify('supply', modification)) {
+      this.crudService.find('supply')
+        .pipe(
+          map(supplies => Lodash.sortBy(supplies, ['name']))
+        ).subscribe(supplies => {
+          this.table.refresh(supplies);
+        });
+    }
   }
 
 }

@@ -1,0 +1,7 @@
+<div class="dialog-container">
+    <div mat-dialog-content class="container">
+        <gdr-data-table #table [data]="data.data" [options]="data.options" (modified)="onModification($event)"
+            (save)="onSave($event)" (cancel)="dialogRef.close()">
+        </gdr-data-table>
+    </div>
+</div>

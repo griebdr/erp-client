@@ -1,0 +1,27 @@
+@import '~@angular/material/theming';
+
+table {
+  width: 100%;
+}
+
+.mat-column-select {
+  width: 48px;
+}
+
+.edit-active {
+  position: absolute;
+  top: -24px;
+  left: -24px;
+  z-index: 10;
+}
+
+.editable-value {
+  width: 100%;
+}
+
+.table-container {
+  position: relative;
+  width: inherit;
+  background-color: inherit;
+  @include mat-elevation(2);
+}

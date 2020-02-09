@@ -1,0 +1,26 @@
+<h1 class="title" mat-dialog-title color="primary">{{data.title}}</h1>
+<div mat-dialog-content class="container">
+  <div class="labels">
+    <ng-container *ngFor="let column of data.options.propertyTypes">
+      <span class="placeholder">
+        <span>{{column.name}}:</span>
+      </span>
+    </ng-container>
+  </div>
+  <div class="edits">
+    <div *ngFor="let propertyType of data.options.propertyTypes">
+      <div (click)="openEditableValue(editableValue)" class="value-container">
+        <gdr-editable-value #editableValue
+          [ngClass]="{'edit-active': editableValue.open, 'edit-inactive': !editableValue.open}"
+          [value]="value[propertyType.name]" [type]="propertyType.type" [options]="propertyType.options"
+          (modified)="onModification(propertyType.name, $event)" (save)="onSave(propertyType.name, $event)">
+        </gdr-editable-value>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-actions class="button-container">
+  <button mat-button color="primary" [mat-dialog-close]="">CANCEL</button>
+  <button mat-button color="primary" (click)="dialogRef.close(value)">SAVE</button>
+</div>

@@ -38,4 +38,14 @@ export class CrudService {
     return result.success;
   }
 
+  getTypes(table: string) {
+    const types = this.http.post<any[]>(this.baseUrl + 'clientTypes', { table });
+    return types;
+  }
+
+  getSchedule(): Observable<any[]>  {
+    const rows = this.http.post<any[]>(this.baseUrl + 'schedule', { productOrders: undefined });
+    return rows;
+  }
+
 }

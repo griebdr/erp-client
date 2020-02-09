@@ -1,0 +1,22 @@
+@import '~@angular/material/theming';
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  @include mat-elevation(2);
+}
+
+.edit-input {
+  width: 85%;
+  font-size: initial;
+  color: initial;
+  align-self: center;
+  padding-top: 10px;
+}
+
+.action-buttons {
+  align-self: flex-end;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}

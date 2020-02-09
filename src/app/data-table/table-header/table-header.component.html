@@ -1,0 +1,21 @@
+<div class="table-header">
+  <div>
+    <button *ngIf="options.insert" class="action-item" mat-button color="primary" (click)="insert.emit()"> <span
+        class="mat-h3 mat-body-strong">
+        INSERT </span> </button>
+    <button *ngIf="options.delete" class="action-item" mat-button color="primary" (click)="delete.emit()"> <span
+        class="mat-h3 mat-body-strong">
+        DELETE </span> </button>
+    <mat-form-field *ngIf="options.filter" class="filter" [floatLabel]="'never'">
+      <input placeholder="filter" matInput (keyup)="filter.emit($event.target.value)">
+    </mat-form-field>
+  </div>
+  <div>
+    <!-- <button *ngIf="options.save" color="primary" mat-icon-button (click)="$event.stopPropagation(); save.emit()">
+      <mat-icon>save</mat-icon>
+    </button> -->
+    <button *ngIf="options.cancel" color="primary" mat-icon-button (click)="$event.stopPropagation(); cancel.emit()">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</div>

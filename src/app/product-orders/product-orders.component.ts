@@ -35,7 +35,7 @@ export class ProductOrdersComponent implements OnInit {
 
     productsOptions.columnTypes = [
       { name: 'product', type: 'Text', options: { map: map2, remap, options } },
-      { name: 'quantity', type: 'Number' }
+      { name: 'count', type: 'Number' }
     ];
 
     productsOptions.cancel = false;

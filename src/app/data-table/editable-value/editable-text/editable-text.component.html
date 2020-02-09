@@ -1,0 +1,18 @@
+<div *ngIf="open; else closed" class="input-container">
+  <mat-form-field class="edit-input">
+    <input gdrCloseAutocomplete matInput type="text" [formControl]="valueControl" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <div class="action-buttons">
+    <button mat-button color="primary" (click)="$event.stopPropagation(); cancel.emit()">CANCEL</button>
+    <button mat-button color="primary" (click)="$event.stopPropagation(); onSave()">SAVE</button>
+  </div>
+</div>
+<ng-template #closed>
+  <span> {{valueControl.value}} </span>
+</ng-template>

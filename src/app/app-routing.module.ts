@@ -9,6 +9,7 @@ import { ShiftsComponent } from './shifts/shifts.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { SkillsComponent } from './skills/skills.component';
 import { ToolsComponent } from './tools/tools.component';
+import { ScheduleComponent } from './schedule/schedule.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
       { path: 'skills', component: SkillsComponent },
       { path: 'supplyOrder', component: SupplyOrdersComponent },
       { path: 'productOrder', component: ProductOrdersComponent },
+      { path: 'schedule', component: ScheduleComponent }
     ]
   },
   { path: '', redirectTo: '/main', pathMatch: 'full' },

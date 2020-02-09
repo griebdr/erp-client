@@ -3,6 +3,7 @@ import * as Lodash from 'lodash';
 import { CrudService } from '../services/crud.service';
 import { map } from 'rxjs/operators';
 import { TableOptions } from 'gdr-data-table';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-shifts',
@@ -12,6 +13,9 @@ import { TableOptions } from 'gdr-data-table';
 export class ShiftsComponent implements OnInit {
   shifts: Promise<object[]>;
   options = new TableOptions();
+
+  days = new FormControl();
+  dayList: string[] = ['Monday', 'Thuesday', 'Wensday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   constructor(private crudService: CrudService) {
     this.shifts = this.crudService.find('shift')

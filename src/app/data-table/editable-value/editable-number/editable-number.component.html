@@ -1,0 +1,12 @@
+<div *ngIf="open; else closed" class="input-container">
+  <mat-form-field class="edit-input">
+    <input gdrFocus matInput type="number" [formControl]="valueControl">
+  </mat-form-field>
+  <div class="action-buttons">
+    <button mat-button color="primary" (click)="$event.stopPropagation(); cancel.emit()">CANCEL</button>
+    <button mat-button color="primary" (click)="$event.stopPropagation(); save.emit(valueControl.value)">SAVE</button>
+  </div>
+</div>
+<ng-template #closed>
+  <span> {{valueControl.value}} </span>
+</ng-template>

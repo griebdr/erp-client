@@ -1,1 +1,8 @@
+<mat-form-field [style.padding]="'20px'">
+  <mat-label>WorkingDays</mat-label>
+  <mat-select [formControl]="days" multiple>
+    <mat-option *ngFor="let day of dayList" [value]="day">{{day}}</mat-option>
+  </mat-select>
+</mat-form-field>
+
 <gdr-data-table #table [data]="shifts" [options]="options" (modified)="onModification($event)"></gdr-data-table>
