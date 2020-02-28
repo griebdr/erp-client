@@ -21,10 +21,6 @@ import { CloseAutocompleteDirective } from './editable-value/close-autocomplete.
 import { FocusDirective } from './editable-value/focus.directive';
 
 import { EditableOpenTableComponent } from './editable-value/editable-table/editable-open-table/editable-open-table.component';
-import { EditableObjectComponent } from './editable-value/editable-object/editable-object.component';
-import { EditableOpenObjectComponent } from './editable-value/editable-object/editable-open-object/editable-open-object.component';
-import { EditableArrayComponent } from './editable-value/editable-array/editable-array.component';
-import { EditableOpenArrayComponent } from './editable-value/editable-array/editable-open-array/editable-open-array.component';
 import { EditableBooleanComponent } from './editable-value/editable-boolean/editable-boolean.component';
 
 
@@ -33,7 +29,7 @@ import { EditableBooleanComponent } from './editable-value/editable-boolean/edit
     DataTableComponent, EditableValueComponent, TableHeaderComponent,
     FocusDirective, CloseAutocompleteDirective, EditableTextComponent, EditableNumberComponent,
     EditableDateComponent, EditableTableComponent, EditableOpenTableComponent,
-    EditableObjectComponent, EditableOpenObjectComponent, EditableArrayComponent, EditableOpenArrayComponent, EditableBooleanComponent
+    EditableBooleanComponent
   ],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule,
@@ -43,6 +39,6 @@ import { EditableBooleanComponent } from './editable-value/editable-boolean/edit
     MatNativeDateModule, MatIconModule, MatDialogModule
   ],
   exports: [DataTableComponent],
-  entryComponents: [EditableOpenObjectComponent, EditableOpenTableComponent, EditableOpenArrayComponent],
+  entryComponents: [EditableOpenTableComponent],
 })
 export class DataTableModule { }

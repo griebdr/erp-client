@@ -28,7 +28,6 @@ export class SuppliesComponent implements OnInit {
     //   { name: 'name', type: 'Text' },
     //   { name: 'quantity', type: 'Number' }
     // ];
-
     this.options = new Promise(async resolve => resolve({ columnTypes: await this.crudService.getTypes('supply').toPromise() }));
 
   }

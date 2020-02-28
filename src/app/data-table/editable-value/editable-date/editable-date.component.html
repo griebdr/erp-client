@@ -1,12 +1,12 @@
 <div *ngIf="open; else closed" class="input-container">
   <mat-form-field class="edit-input">
-    <input gdrFocus matInput [matDatepicker]="picker" [formControl]="valueControl">
+    <input (keyup.enter)="save.emit(valueControl.value)" (keyup.esc)="cancel.emit()" gdrFocus matInput [matDatepicker]="picker" [formControl]="valueControl">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
   <div class="action-buttons">
     <button mat-button color="primary" (click)="$event.stopPropagation(); cancel.emit()">CANCEL</button>
-    <button mat-button color="primary" (click)="$event.stopPropagation(); save.emit(this.valueControl.value)">SAVE</button>
+    <button mat-button color="primary" (click)="$event.stopPropagation(); save.emit(valueControl.value)">SAVE</button>
   </div>
 </div>
 <ng-template #closed>

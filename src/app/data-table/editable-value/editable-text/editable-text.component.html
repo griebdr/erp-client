@@ -1,6 +1,6 @@
 <div *ngIf="open; else closed" class="input-container">
   <mat-form-field class="edit-input">
-    <input gdrCloseAutocomplete matInput type="text" [formControl]="valueControl" [matAutocomplete]="auto">
+    <input (keyup.enter)="onSave()" (keyup.esc)="cancel.emit()" gdrCloseAutocomplete matInput type="text" [formControl]="valueControl" [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete">
       <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
         {{option}}

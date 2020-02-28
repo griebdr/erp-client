@@ -1,6 +1,4 @@
-import { Observable } from 'rxjs';
-
-export type EditableType = 'Text' | 'Number' | 'Boolean' | 'Date' | 'Object' | 'Array' | 'Table';
+export type EditableType = 'string' | 'number' | 'boolean' | 'date' | 'table';
 
 export interface ColumnType {
   name: string;
@@ -23,19 +21,8 @@ export class ObjectOptions {
 
 export class TableOptions {
   columnTypes?: ColumnType[];
-  editDisabled?: Array<string> | boolean;
-  hiddenColumns?: Array<string>;
-  filter?: boolean;
-  select?: boolean;
-  insert?: boolean;
-  delete?: boolean;
-  pagination?: boolean;
-  save?: boolean;
-  cancel?: boolean;
-
-  constructor(options?: TableOptions) {
-    Object.assign({}, this, options);
-  }
+  clientDbMap?: { dbValue: any, clientValue: any }[];
+  close?: boolean;
 }
 
 

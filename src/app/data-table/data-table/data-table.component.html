@@ -1,13 +1,13 @@
 <div class="table-container">
   <ng-container>
-    <gdr-table-header [options]="options" (insert)="onInsert()" (delete)="onDelete()"
+    <app-table-header [options]="options" (insert)="onInsert()" (delete)="onDelete()"
       (filter)="this.dataSource.filter = $event" (cancel)="cancel.emit(data)" (save)="save.emit(data)">
-    </gdr-table-header>
+    </app-table-header>
     <mat-divider></mat-divider>
   </ng-container>
 
   <table mat-table matSort [dataSource]="dataSource">
-    <ng-container *ngIf="options.select" matColumnDef="select">
+    <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
           [indeterminate]="selection.hasValue() && !isAllSelected()">
@@ -20,24 +20,24 @@
       </td>
     </ng-container>
 
-    <ng-container *ngFor="let column of options.columnTypes; index as j">
+    <ng-container *ngFor="let column of resolvedOptions?.columnTypes; index as j">
       <ng-container matColumnDef={{column.name}}>
         <th mat-header-cell mat-sort-header *matHeaderCellDef>
           {{column.name}} </th>
-        <td (click)="onCellClick(editableValue, column.name)" mat-cell *matCellDef="let element; index as i">
+        <td [ngClass]="{'cell-missmatch': isMissmatch(element, column.name)}" (click)="onCellClick(editableValue, column.name)" mat-cell *matCellDef="let element; index as i">
           <div [style.position]="'relative'">
-            <gdr-editable-value #editableValue [value]="element[column.name]" class="editable-value"
-              [type]="column.type" [options]="column.options" [valueConfirmed]="valueConfirmed"
-              [ngClass]="{'edit-active': column.type !== 'Table' && column.type !== 'Object' && column.type !== 'Array' && editableValue.open}"
+            <app-editable-value  #editableValue [value]="element[column.name]" class="editable-value"
+              [type]="column.type" [options]="column.options"
+              [ngClass]="{'edit-active': column.type !== 'table' && editableValue.open}"
               (save)="onUpdate(element, column.name, $event)" (modified)="onModification(element, column.name, $event)">
-            </gdr-editable-value>
+            </app-editable-value>
           </div>
         </td>
       </ng-container>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="columnsWithSelect"></tr>
-    <tr mat-row *matRowDef="let row; columns: columnsWithSelect;"></tr>
+    <tr [ngClass]="{'row-missmatch': isRowMissmatch(row)}" mat-row *matRowDef="let row; columns: columnsWithSelect;"></tr>
   </table>
-  <mat-paginator *ngIf="options.pagination" [pageSizeOptions]="[12, 16, 20]" showFirstLastButtons>
+  <mat-paginator [pageSizeOptions]="[10, 30, 50, 70, 90]" showFirstLastButtons>
   </mat-paginator>
 </div>

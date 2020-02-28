@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'gdr-editable-number',
+  selector: 'app-editable-number',
   templateUrl: './editable-number.component.html',
   styleUrls: ['./editable-number.component.scss']
 })

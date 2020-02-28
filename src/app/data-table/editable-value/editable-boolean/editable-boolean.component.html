@@ -1,6 +1,6 @@
 <div *ngIf="open; else closed" class="input-container">
-  <form [formGroup]="formGroup" *ngIf="open; else closed" class="edit-input">
-    <mat-checkbox formControlName="checkBoxControl"></mat-checkbox>
+  <form  [formGroup]="formGroup" *ngIf="open; else closed" class="edit-input">
+    <mat-checkbox autofocus (keyup.enter)="cancel.emit()" formControlName="checkBoxControl"></mat-checkbox>
   </form>
   <div class="action-buttons">
     <button mat-button color="primary" (click)="$event.stopPropagation(); cancel.emit()">CANCEL</button>

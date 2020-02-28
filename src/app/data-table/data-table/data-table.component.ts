@@ -3,10 +3,7 @@ import { EditableValueComponent } from '../editable-value/editable-value.compone
 import { TableOptions, EditableType, ObjectOptions, ColumnType, PropertyType } from '../editable-value/editable-type';
 import { MatTableDataSource, MatTable, MatSort, MatPaginator, MatDialog } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import * as Lodash from 'lodash';
-import { EditableOpenObjectComponent } from '../editable-value/editable-object/editable-open-object/editable-open-object.component';
-import { Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import * as lodash from 'lodash';
 
 export class TableModification {
   type: 'insert' | 'update' | 'delete';
@@ -14,7 +11,7 @@ export class TableModification {
 }
 
 @Component({
-  selector: 'gdr-data-table',
+  selector: 'app-data-table',
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss']
 })
@@ -24,205 +21,60 @@ export class DataTableComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  @Input() options: TableOptions;
-  @Input() valueConfirmed: Observable<boolean>;
+  @Input() options: Promise<TableOptions>;
+  @Input() data: Promise<any[]>;
 
   @Output() modified = new EventEmitter<TableModification>();
   @Output() save = new EventEmitter<object[]>();
   @Output() cancel = new EventEmitter<object[]>();
 
-  updateValue: { row: any, column: any, value: any };
-  insertValue: any;
-
-
-  defaultOptions: TableOptions;
   dataSource = new MatTableDataSource<any>([]);
   selection = new SelectionModel<any>(true, []);
 
-  constructor(public dialog: MatDialog, public router: Router) {
-    this.defaultOptions = {
-      filter: true,
-      pagination: true,
-      editDisabled: false,
-      select: true,
-      insert: true,
-      delete: true,
-      cancel: false,
-      save: false,
-      hiddenColumns: [],
-    };
+  resolvedOptions: TableOptions;
+
+  constructor(public dialog: MatDialog) {
+
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.dataSource.sort = this.sort;
-    setTimeout(() => this.dataSource.paginator = this.paginator, 0);
+    setTimeout(() => this.dataSource.paginator = this.paginator);
 
-    (this.options as Promise<TableOptions>).then(options => this.options = Object.assign({}, this.defaultOptions, options));
+    this.data = Promise.resolve(this.data);
+    this.options = Promise.resolve(this.options);
 
-
-    if (!this.valueConfirmed) {
-      this.valueConfirmed = new Observable<any>();
-    }
-
-    this.valueConfirmed.subscribe(() => {
-      if (this.updateValue) {
-        this.updateValue.row[this.updateValue.column] = this.updateValue.value;
-      } else if (this.insertValue) {
-        this.dataSource.data.unshift(this.insertValue);
-      }
-      this.updateValue = this.insertValue = undefined;
-      this.dataSource.data = this.dataSource.data;
+    Promise.all([this.data, this.options]).then((res) => {
+      this.resolvedOptions = res[1];
+      this.dataSource.data = res[0] === undefined ? [] : res[0];
+      this.sort.sort({ id: res[1].columnTypes[0].name, start: 'asc', disableClear: true });
     });
-  }
 
-  @Input() set data(data: any) {
-    data = Promise.resolve(data);
-    data.then((data2: object[]) => {
-      this.dataSource.data = data2 === undefined ? [] : data2;
-      // this.initializeTypes();
-    });
-  }
-
-  get data() {
-    return this.dataSource.data;
-  }
-
-  initializeTypes() {
-
-    const getType = (value: any): EditableType => {
-      let type: EditableType;
-
-      if (typeof value === 'number') {
-        type = 'Number';
-      } else if (typeof value === 'string') {
-        type = 'Text';
-      } else if (typeof value === 'boolean') {
-        type = 'Boolean';
-      } else if (value instanceof Date) {
-        type = 'Date';
-      } else if (Lodash.isArray(value)) {
-        for (const value2 of value) {
-          if (value2) {
-            if (Lodash.isObject(value2) && !(value2 instanceof Date)) {
-              type = 'Table';
-            } else {
-              type = 'Array';
-            }
-            break;
-          }
-        }
-
-      } else if (value instanceof Object) {
-        type = 'Object';
-      }
-
-      return type;
-    };
-
-    const getTypes = (values: any[]): ColumnType[] => {
-      const types: ColumnType[] = [];
-
-      for (const value of values) {
-        if (getType(value) !== 'Object') {
-          if (types.length === 0 && getType(value) !== undefined) {
-            types.push({ name: 'name', type: getType(value) });
-          }
-        } else {
-          Lodash.forOwn(value, (element, key) => {
-            const type = { name: key, type: getType(element), options: {} };
-
-            if (type.type === 'Object') {
-              (type.options as ObjectOptions).propertyTypes =
-                getTypes(values.reduce((accumulator, currentValue) => {
-                  accumulator.push(currentValue[type.name]);
-                  return accumulator;
-                }, []));
-            } else if (type.type === 'Table' || type.type === 'Array') {
-              (type.options as TableOptions).columnTypes =
-                getTypes(values.reduce((accumulator, currentValue) => {
-                  accumulator.push(...currentValue[type.name]);
-                  return accumulator;
-                }, []));
-            }
-            if (!Lodash.find(types, (type2) => type2.name === type.name) && type.type !== undefined) {
-              types.push(type);
-            }
-          });
-        }
-      }
-
-      return types;
-    };
-
-    const mergeTypes = (userTypes: ColumnType[], inferredTypes: ColumnType[]) => {
-      for (const userType of userTypes) {
-        const inferredType = Lodash.find(inferredTypes, (inferredType2) => inferredType2.name === userType.name);
-
-        if (!userType.options) {
-          userType.options = {};
-        }
-
-        if (!inferredType) {
-          continue;
-        }
-
-        if (userType.type === 'Table' || userType.type === 'Array') {
-          if (!(userType.options as TableOptions).columnTypes) {
-            (userType.options as TableOptions).columnTypes = [];
-          }
-          mergeTypes((userType.options as TableOptions).columnTypes, (inferredType.options as TableOptions).columnTypes);
-        } else if (userType.type === 'Object') {
-          if (!(userType.options as ObjectOptions).propertyTypes) {
-            (userType.options as ObjectOptions).propertyTypes = [];
-          }
-          mergeTypes((userType.options as ObjectOptions).propertyTypes, (inferredType.options as ObjectOptions).propertyTypes);
-        }
-      }
-
-      const diff = Lodash.differenceWith(inferredTypes as ColumnType[], userTypes, (a, b) => a.name === b.name);
-      userTypes.push(...diff);
-    };
-
-    // mergeTypes(this.options.columnTypes as ColumnType[], getTypes(this.dataSource.data));
+    this.dataSource.data = this.dataSource.data;
   }
 
   onCellClick(editableValue: EditableValueComponent, column: string) {
-    const options = this.options as TableOptions;
-    if (
-      this.openedEditableValue === undefined &&
-      options.editDisabled !== true &&
-      (options.editDisabled === false || (options.editDisabled as any).indexOf(column) > -1)
-    ) {
+    if (this.openedEditableValue === undefined) {
       editableValue.open = true;
     }
-
   }
 
   onUpdate(row: object, column: string, value: any) {
+    row[column] = value;
+
     const update = {
       type: 'update' as any,
-      modification: { row: Lodash.clone(row), column, value }
+      modification: { row, column, value }
     };
 
-    // row[column] = value;
-    this.modified.emit(update);
+    if (this.resolvedOptions.columnTypes.find((columnType) => columnType.name === column).type !== 'table') {
+      this.modified.emit(update);
+    }
   }
 
   onInsert() {
-    const options = this.options as TableOptions;
-
-    const dialogRef = this.dialog.open(EditableOpenObjectComponent, {
-      width: '320px',
-      data: { value: {}, options: { propertyTypes: options.columnTypes }, title: 'Insert' },
-      autoFocus: false,
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        this.insertValue = result;
-        this.modified.emit({ type: 'insert', modification: result });
-      }
-    });
+    this.dataSource.data.unshift({});
+    this.dataSource.data = this.dataSource.data;
   }
 
   onDelete() {
@@ -231,11 +83,8 @@ export class DataTableComponent implements OnInit {
     });
 
     this.modified.emit({ type: 'delete', modification: this.selection.selected });
-
     this.selection.clear();
     this.dataSource.data = this.dataSource.data;
-
-    console.log(this.dataSource.data);
   }
 
   onModification(row: object, column: string, modification: any) {
@@ -254,24 +103,6 @@ export class DataTableComponent implements OnInit {
       this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
-  get columnsWithSelect() {
-    if (!this.options.columnTypes) {
-      return;
-    }
-
-    const options = this.options as TableOptions;
-    const columns = options.columnTypes.map(columnInfo => columnInfo.name);
-
-    if (options.select) {
-      columns.unshift('select');
-    }
-
-    if (options.hiddenColumns) {
-      Lodash.remove(columns, (column) => options.hiddenColumns.find((hiddenColumn) => column === hiddenColumn) !== undefined);
-    }
-
-    return columns;
-  }
 
   get openedEditableValue(): any {
     let editableValue2: any;
@@ -282,35 +113,64 @@ export class DataTableComponent implements OnInit {
       }
     });
 
-
-
     return editableValue2;
   }
 
-  getValue(column: ColumnType, element: any) {
-    if (column.type === 'Table' && element[column.name] === undefined) {
-      return element[column.name] = [];
+  get columnsWithSelect() {
+    if (!this.resolvedOptions) {
+      return [];
     }
-    const x = element[column.name];
-    return x;
+
+    const columnsWithSelect = this.resolvedOptions.columnTypes.map(columnInfo => columnInfo.name);
+    columnsWithSelect.unshift('select');
+
+    return columnsWithSelect;
   }
 
-  refresh(data: any) {
-    // const d1 = Lodash.differenceWith(data, this.data, Lodash.isEqual);
-    // const d2 = Lodash.differenceWith(this.data, data, Lodash.isEqual);
+  isMissmatch(row: any, column: string) {
+    const dbClientMap = this.resolvedOptions.clientDbMap;
 
-    // if (this.openedEditableValue && this.openedEditableValue.type === 'Table') {
-    //   Lodash.forIn(d2[0], (value, key) => {
-    //     if (Lodash.isEqual(value, this.openedEditableValue.value)) {
-    //       this.dialog.openDialogs.forEach(dialog => {
-    //         dialog.componentInstance.table.data = d1[0][key];
-    //       });
-    //     }
-    //   });
-    // } else {
-    //   this.data = data;
-    // }
+    if (dbClientMap) {
+      const dcm = dbClientMap.find(value => value.clientValue === row);
+
+      if (!dcm) {
+        return false;
+      }
+
+      if (!lodash.isEqual(dcm.dbValue[column], row[column])) {
+        // console.log(dcm.dbValue[column], row[column]);
+      }
+
+      return !lodash.isEqualWith(row[column], dcm.dbValue[column], this.myIsEqual);
+    }
+
+    return false;
   }
 
+  myIsEqual = (a: any, b: any) => {
+    if (this.resolvedOptions && lodash.isArray(a)) {      
+      for (const value of a) {
+        const c = this.resolvedOptions.clientDbMap.find(value2 => value2.clientValue === value);
+        if (!c || !lodash.isEqualWith(c.clientValue, c.dbValue, this.myIsEqual)) {
+          return false;
+        }
+      } 
+      return true;
+    }
+  }
+
+  isRowMissmatch(row: any) {
+    const dbClientMap = this.resolvedOptions.clientDbMap;
+
+    if (dbClientMap) {
+      const dcm = dbClientMap.find(value => value.clientValue === row);
+
+      if (!dcm) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
 

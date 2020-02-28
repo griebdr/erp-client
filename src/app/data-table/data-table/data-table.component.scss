@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 
 table {
   width: 100%;
@@ -17,6 +17,7 @@ table {
 
 .editable-value {
   width: 100%;
+  background-color: red($color: #000000);
 }
 
 .table-container {
@@ -25,3 +26,21 @@ table {
   background-color: inherit;
   @include mat-elevation(2);
 }
+
+.cell-missmatch {
+  // border-style: groove;
+  // border: 2px groove rgb(255, 0, 0);
+  // background-color: red;
+  // border: red($color: #000000);
+  // border-radius: 100px;
+  // border-color: rgb(255, 104, 104);
+  // border-bottom-width: medium;
+  // border-radius: 5px;
+
+  background-color: rgb(255, 244, 244);
+}
+
+.row-missmatch {
+  background-color: rgb(255, 244, 244);
+}
+

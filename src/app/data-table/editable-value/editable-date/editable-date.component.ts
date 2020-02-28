@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'gdr-editable-date',
+  selector: 'app-editable-date',
   templateUrl: './editable-date.component.html',
   styleUrls: ['./editable-date.component.scss']
 })

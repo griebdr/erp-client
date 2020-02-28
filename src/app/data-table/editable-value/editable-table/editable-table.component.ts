@@ -9,7 +9,7 @@ import {ViewEncapsulation} from '@angular/core';
 
 
 @Component({
-  selector: 'gdr-editable-table',
+  selector: 'app-editable-table',
   templateUrl: './editable-table.component.html',
   styleUrls: ['./editable-table.component.scss'],
 })
@@ -42,16 +42,16 @@ export class EditableTableComponent implements OnInit, EditableValue {
         width: '100vw',
         data: { data: this.value, options: this.options, modified: this.tableModified },
         autoFocus: false,
-        // disableClose: true
+        disableClose: true
       });
 
       this.dialogRef.afterClosed().subscribe(result => {
         this.open2 = false;
-        // if (result !== undefined) {
-        //   this.save.emit(result);
-        // } else {
-        //   this.cancel.emit();
-        // }
+        if (result !== undefined) {
+          this.save.emit(result);
+        } else {
+          this.cancel.emit();
+        }
       });
     } else {
       this.dialogRef.close();

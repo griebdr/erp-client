@@ -1,6 +1,6 @@
 <div *ngIf="open; else closed" class="input-container">
   <mat-form-field class="edit-input">
-    <input gdrFocus matInput type="number" [formControl]="valueControl">
+    <input (keyup.enter)="save.emit(valueControl.value)" (keyup.esc)="cancel.emit()" gdrFocus matInput type="number" [formControl]="valueControl">
   </mat-form-field>
   <div class="action-buttons">
     <button mat-button color="primary" (click)="$event.stopPropagation(); cancel.emit()">CANCEL</button>

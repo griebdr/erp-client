@@ -5,6 +5,7 @@
   flex-direction: column;
   background-color: #f9f9f9;
   @include mat-elevation(2);
+  min-width: 180px;
 }
 
 .edit-input {

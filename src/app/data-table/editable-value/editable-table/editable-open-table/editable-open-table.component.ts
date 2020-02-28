@@ -11,7 +11,7 @@ interface DialogData {
 }
 
 @Component({
-  selector: 'gdr-editable-open-table',
+  selector: 'app-editable-open-table',
   templateUrl: './editable-open-table.component.html',
   styleUrls: ['./editable-open-table.component.scss']
 })
@@ -23,11 +23,11 @@ export class EditableOpenTableComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
   ngOnInit() {
-    this.data.options = Object.assign({}, { save: false, cancel: true }, this.data.options);
+    this.data.options = Object.assign({}, { save: true, cancel: true }, this.data.options);
   }
 
   onSave(value: any) {
-    this.dialogRef.close(value);
+    this.dialogRef.close(this.table.dataSource.data);
   }
 
   onModification(modification: any) {

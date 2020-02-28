@@ -6,7 +6,7 @@ import { startWith, map } from 'rxjs/operators';
 import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
-  selector: 'gdr-editable-text',
+  selector: 'app-editable-text',
   templateUrl: './editable-text.component.html',
   styleUrls: ['./editable-text.component.scss']
 })
@@ -31,7 +31,7 @@ export class EditableTextComponent implements OnInit {
       this.options = {};
     }
 
-    if (!this.options.map) {
+    if (this.options.map === undefined) {
       this.options.map = (value) => value;
       this.options.remap = (originalValue, mappedValue) => mappedValue;
     }
@@ -59,6 +59,10 @@ export class EditableTextComponent implements OnInit {
       value = this.options.map(value);
     }
 
+    if (!value) {
+      value = '';
+    }
+
     this.valueControl.setValue(value);
   }
 
@@ -72,9 +76,16 @@ export class EditableTextComponent implements OnInit {
     this.save.emit(this.value2);
   }
 
-  private filter(value: string): string[] {
+  filter(value: string): string[] {
+    if (value === undefined) {
+      return;
+    }
+
     const options = this.options.options.map((option) => this.options.map(option));
     const filterValue = value.toLowerCase();
-    return options.filter((option: string) => option.toLowerCase().includes(filterValue));
+
+    return options.filter((option: string) => {
+      return this.options.map(option).toLowerCase().includes(filterValue);
+    });
   }
 }

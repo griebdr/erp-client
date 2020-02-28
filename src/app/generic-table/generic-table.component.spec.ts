@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditableOpenObjectComponent } from './editable-open-object.component';
+import { GenericTableComponent } from './generic-table.component';
 
-describe('EditableOpenObjectComponent', () => {
-  let component: EditableOpenObjectComponent;
-  let fixture: ComponentFixture<EditableOpenObjectComponent>;
+describe('GenericTableComponent', () => {
+  let component: GenericTableComponent;
+  let fixture: ComponentFixture<GenericTableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditableOpenObjectComponent ]
+      declarations: [ GenericTableComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditableOpenObjectComponent);
+    fixture = TestBed.createComponent(GenericTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

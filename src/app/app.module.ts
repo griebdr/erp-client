@@ -24,6 +24,7 @@ import { ToolsComponent } from './tools/tools.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { DataTableModule } from './data-table/data-table.module';
+import { GenericTableComponent } from './generic-table/generic-table.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { DataTableModule } from './data-table/data-table.module';
     EmployeesComponent,
     SkillsComponent,
     ToolsComponent,
-    ScheduleComponent
+    ScheduleComponent,
+    GenericTableComponent
   ],
   imports: [
     BrowserAnimationsModule,
