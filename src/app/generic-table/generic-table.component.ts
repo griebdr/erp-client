@@ -52,8 +52,10 @@ export class GenericTableComponent implements OnInit {
         }
       };
 
-      setTableOptions(options);
-      options.close = false;
+      if (options && options.columnTypes) {
+        setTableOptions(options);
+        options.close = false;
+      }
     });
 
     const data = await this.data;

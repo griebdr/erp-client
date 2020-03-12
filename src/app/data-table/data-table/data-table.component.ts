@@ -4,6 +4,8 @@ import { TableOptions, EditableType, ObjectOptions, ColumnType, PropertyType } f
 import { MatTableDataSource, MatTable, MatSort, MatPaginator, MatDialog } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import * as lodash from 'lodash';
+import * as moment from 'moment';
+import { isArray } from 'util';
 
 export class TableModification {
   type: 'insert' | 'update' | 'delete';
@@ -46,11 +48,55 @@ export class DataTableComponent implements OnInit {
 
     Promise.all([this.data, this.options]).then((res) => {
       this.resolvedOptions = res[1];
+      if (!this.resolvedOptions.columnTypes) {
+        this.resolvedOptions.columnTypes = this.getColumnTypes(res[0]);
+      }
+      console.log(lodash.cloneDeep(this.resolvedOptions.columnTypes));
       this.dataSource.data = res[0] === undefined ? [] : res[0];
       this.sort.sort({ id: res[1].columnTypes[0].name, start: 'asc', disableClear: true });
     });
 
     this.dataSource.data = this.dataSource.data;
+  }
+
+  getType = (value: any): EditableType => {
+    if (lodash.isArray(value)) {
+      return 'table';
+    }
+
+    if (moment(value, moment.ISO_8601, true).isValid()) {
+      return 'date';
+    }
+
+    return typeof value as any;
+  }
+
+  getColumnTypes(values: any[]): any {
+    const columnTypes = [];
+    const allRow = {};
+    
+    for (const row of values) {
+      lodash.forOwn(row, (value, key) => {
+        if (!allRow[key]) {
+          allRow[key] = [];
+        }
+        if (isArray(value)) {
+          allRow[key].push(...value);
+        } else {
+          allRow[key].push(value);
+        }
+      });
+    }
+
+    lodash.forOwn(allRow, (value, key) => {
+      if (lodash.isObject(value[0])) {
+        columnTypes.push({ name: key, type: 'table', options: { columnTypes: this.getColumnTypes(value), close: true } });
+      } else {
+        columnTypes.push({ name: key, type: this.getType(value[0])});
+      }
+    });
+
+    return columnTypes;
   }
 
   onCellClick(editableValue: EditableValueComponent, column: string) {
@@ -148,13 +194,13 @@ export class DataTableComponent implements OnInit {
   }
 
   myIsEqual = (a: any, b: any) => {
-    if (this.resolvedOptions && lodash.isArray(a)) {      
+    if (this.resolvedOptions && lodash.isArray(a)) {
       for (const value of a) {
         const c = this.resolvedOptions.clientDbMap.find(value2 => value2.clientValue === value);
         if (!c || !lodash.isEqualWith(c.clientValue, c.dbValue, this.myIsEqual)) {
           return false;
         }
-      } 
+      }
       return true;
     }
   }
